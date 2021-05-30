@@ -1,0 +1,11 @@
+  build:
+    machine: true
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "bd:f7:c9:bb:13:1f:49:17:a6:7a:02:cd:17:e2:2e:83"
+      - checkout
+      - run: docker login -u $DOCKER_USER -p $DOCKER_PASS
+      - run: docker build -t tpargmdiaz/hola-docker:$CIRCLE_SHA1 .
+      - run: ssh -o StrictHostKeyChecking=no root@plex.mauriciodiaz.com.ar "/bin/bash /root/docker/deploy.sh $CIRCLE_SHA1"
+
